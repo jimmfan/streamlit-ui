@@ -1,0 +1,42 @@
+name: Generate Project Structure
+
+on:
+  push:
+
+env:
+  author: jimmfan
+  email: jimmfan@github.com
+  project_name: streamlit-ui
+  python_version: 3.13 # basic_python
+  template_directory: basic_python
+  
+jobs:
+  generate_template:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+    - name: Create Cookiecutter Template
+      uses: jimmfan/cookiecutter-action@main
+      with:
+        author: ${{ env.author }}
+        email: ${{ env.email }}
+        project_name: ${{ env.project_name }}
+        python_version: ${{ env.python_version }}
+        template_directory: ${{ env.template_directory }}
+        workflow_token: ${{ secrets.WORKFLOW_TOKEN }}
+        
+    - name: Create and Push to Branch
+      run: |
+        BRANCH_NAME=${{ github.ref_name }}
+        # Configure Git with the provided environment variables
+        git config user.name "${{ env.GIT_USER_NAME }}"
+        git config user.email "${{ env.GIT_USER_EMAIL }}"
+        git checkout $BRANCH_NAME
+        git add .
+        git commit -m "Generate project structure with Cookiecutter"
+        git push -u origin $BRANCH_NAME
+      env:
+        GIT_USER_NAME: "GitHub Actions"
+        GIT_USER_EMAIL: "actions@github.com"
+        
