@@ -1,7 +1,6 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 
-
 # Virtual environments
 .env
 .venv
@@ -25,6 +24,3 @@ Thumbs.db
 
 # Log files
 *.log
-
-*.egg-info/
-build/
