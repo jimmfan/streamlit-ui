@@ -1,4 +1,4 @@
-# uv run streamlit run src/streamlit/horizontal_dev.py
+# uv run streamlit run src/streamlit/horizontal_layout.py
 import streamlit as st
 import pandas as pd
 from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, JsCode
@@ -27,15 +27,18 @@ tables = [
     {"source": "team rocket", "process": "process name 13", "owner": "James"},
 ]
 
-st.set_page_config(page_title="Streamlit Aggrid", layout="wide")
-st.title("Streamlit Aggrid")
+st.set_page_config(page_title="Streamlit Dashboard", layout="wide")
+st.title("Streamlit Dashboard")
 
-# Initialize session state DataFrames
-if "selected_df" not in st.session_state:
-    st.session_state.selected_df = pd.DataFrame(tables)
+# Initialize session state with original data if not already set
+if "original_df" not in st.session_state:
+    st.session_state.original_df = pd.DataFrame(tables)
 
 if "final_df" not in st.session_state:
     st.session_state.final_df = pd.DataFrame()
+
+# Use a copy of the original data for filtering, without modifying session state
+df_filtered = st.session_state.original_df.copy()
 
 # Filters
 col1, col2, col3 = st.columns(3)
@@ -43,32 +46,28 @@ col1, col2, col3 = st.columns(3)
 with col1:
     selected_sources = st.multiselect(
         "Filter by Source",
-        st.session_state.selected_df["source"].unique(),
+        df_filtered["source"].unique(),
     )
 
 with col2:
     selected_processes = st.multiselect(
         "Filter by Process",
-        st.session_state.selected_df["process"].unique(),
+        df_filtered["process"].unique(),
     )
 
 with col3:
     selected_owners = st.multiselect(
         "Filter by Owner",
-        st.session_state.selected_df["owner"].unique(),
+        df_filtered["owner"].unique(),
     )
 
-# Apply filters
-df_filtered = st.session_state.selected_df.copy()
+# Apply filters dynamically without overwriting the dataset
 if selected_sources:
     df_filtered = df_filtered[df_filtered["source"].isin(selected_sources)]
 if selected_processes:
     df_filtered = df_filtered[df_filtered["process"].isin(selected_processes)]
 if selected_owners:
     df_filtered = df_filtered[df_filtered["owner"].isin(selected_owners)]
-
-# Update session state
-st.session_state.selected_df = df_filtered
 
 # Display table with AgGrid
 if not df_filtered.empty:
@@ -95,6 +94,7 @@ if not df_filtered.empty:
         gridOptions=gridOptions,
         update_mode=GridUpdateMode.MODEL_CHANGED,
         allow_unsafe_jscode=True,
+        key="filtered",
     )
 
     selected_rows = grid_response["selected_rows"]
@@ -102,7 +102,7 @@ if not df_filtered.empty:
     if any(selected_rows):
         st.write("Selected Rows:", selected_rows)
 
-# Button to copy selected rows
+# Button to copy selected rows (preserving all original data)
 if st.button("Copy to Final DataFrame") and any(selected_rows):
     selected_rows_df = pd.DataFrame(selected_rows)
     st.session_state.final_df = (
@@ -135,6 +135,7 @@ if not st.session_state.final_df.empty:
         gridOptions=grid_options_final,
         update_mode=GridUpdateMode.MODEL_CHANGED,
         allow_unsafe_jscode=True,
+        key="final",
     )
 
     selected_rows_final = grid_response_final["selected_rows"]
