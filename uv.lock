@@ -220,11 +220,11 @@ wheels = [
 
 [[package]]
 name = "narwhals"
-version = "1.27.1"
+version = "1.28.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/5a/d6/1dadff863b95e4ec74eaba7979278e446699532136c74183a398778b1949/narwhals-1.27.1.tar.gz", hash = "sha256:68505d0cee1e6c00382ac8b65e922f8b694a11cbe482a057fa63139de8d0ea03", size = 251670 }
+sdist = { url = "https://files.pythonhosted.org/packages/ba/65/cc4f1d02d418e587fc5b9b31f3cbb8db83f4b35f91d7b59adfa8d947f644/narwhals-1.28.0.tar.gz", hash = "sha256:a2213fa44a039f724278fb15609889319e7c240403413f2606cc856c8d8f708d", size = 252143 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ed/ea/dc14822a0a75e027562f081eb638417b1b7845e1e01dd85c5b6573ebf1b2/narwhals-1.27.1-py3-none-any.whl", hash = "sha256:71e4a126007886e3dd9d71d0d5921ebd2e8c1f9be9c405fe11850ece2b066c59", size = 308837 },
+    { url = "https://files.pythonhosted.org/packages/73/aa/eedf2ade0c16a60541ca7acd48665c62dc0d11e1e910467b6c7e6b1eda34/narwhals-1.28.0-py3-none-any.whl", hash = "sha256:45d909ad6240944d447b0dae38074c5a919830dff3868d57b05a5526c1f06fe4", size = 308950 },
 ]
 
 [[package]]
@@ -572,7 +572,6 @@ name = "streamlit-ui"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
-    { name = "pandas" },
     { name = "streamlit" },
     { name = "streamlit-aggrid" },
 ]
@@ -584,7 +583,6 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "pandas", specifier = ">=2.2.3" },
     { name = "ruff", marker = "extra == 'dev'" },
     { name = "streamlit", specifier = ">=1.42.2" },
     { name = "streamlit-aggrid", specifier = ">=1.1.0" },

@@ -5,15 +5,12 @@ POETRY_VERSION=1.7
 SOURCE_OBJECTS=src tests
 
 setup:
-	python -m pip install --upgrade pip
-	pip3 install poetry==${POETRY_VERSION}
-	poetry install --with dev
+	# python3 -m pip3 install --upgrade pip
+	uv pip install -r pyproject.toml --extra dev
 
-format.black:
-	poetry run black ${SOURCE_OBJECTS}
-format.isort:
-	poetry run isort --atomic ${SOURCE_OBJECTS}
-format: format.isort format.black
+format:
+	make setup
+	ruff format .
 
 lints.format.check:
 	poetry run black --check ${SOURCE_OBJECTS}
